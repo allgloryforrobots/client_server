@@ -1,8 +1,8 @@
-require('dotenv').config()
-const express = require("express")
+import dotenv from 'dotenv' 
+import express from "express"
 // const sequilize = require('./db.js')
 
-
+dotenv.config()
 
 const PORT = process.env.PORT || 5000
 const app = express()
