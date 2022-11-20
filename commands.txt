@@ -1,0 +1,147 @@
+image -> то, из чего создается контейнер
+
+docker 			команды
+docker build . 		собрать образ
+docker image ls		взять image id 
+docker run [вставляем image id с предыдущей команды]
+
+
+установить образ и посмотреть образы
+docker pull node
+docker images
+или docker run node [тут можно с предыдущей команды взять образ]
+
+docker ps --help посмотреть справку по любой команде добавить --help
+
+docker ps список всех контейнеров запущенных
+
+docker ps --all вообще все которые на ОС
+
+docker run -it node
+(запустить ноду в интерактивном режиме)
+
+контейнеры после запуска копятся их надо удалять
+docker rm [id]
+можно строки через пробел
+
+удаление изображений
+docker rmi [id]
+можно строки через пробел
+
+docker container prune удаляет все контейнеры которые установлены и не используются
+
+docker image prune удаляет все изображения, которые не используются
+
+docker build . создать образ
+(образ создается без имени и тега, но у него есть айди)
+
+
+// ошибки
+если не запускается build .
+cmd => в командную строку
+"C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchDaemon
++
+docker pull node
++ docker build .
+
+остановить запущенный контейнер
+docker ps 
+смотрим container_id
+docker stop [container_id]
+
+запуск контейнера
+docker ps -a  смотрим айди контейнера
+docker start [id]
+
+запуск изображения
+docker images
+docker run [image_id]
+
+запуск изображения на порту в браузере
+docker images
+docker run -p 3000:3000 [image_id] 
+(1й порт локальный порт на локальной машине, чтобы запустить контейнер)
+(2й порт, это какой порт из контейнера мы хоти замапить на наш локальный)
+
+чтобы не погружаться в консоль, которую нам запускает сам контейнер
+(остановить можно с той же где запустили) -d
+docker run -d -p 3000:3000 [image_id] 
+
+запустить контейнер (не погружаясь в консоль стартануть)
+docker start [container_id]
+
+стоп 
+docker stop [container_id]
+
+подключиться к контейнеру в консоли
+docker ps
+docker attach [cont_id]
+
+вызвать консоль логи контейнера
+docker logs [id]
+
+задать имя контейнера
+docker run -d -p 3000:3000 --name [name]  afff1eaa7cdd
+
+по [name] можно обращаться к контейнеру
+
+удалить контейнер как только он будет остановлен
+--rm
+docker run -d -p 3000:3000 --name logsapp --rm afff1eaa7cdd
+
+задать имя
+docker build -t [name] .
+
+вызвать по имени 
+docker run -d -p 3000:3000 --rm [name]
+
+указать имя версии
+docker build -t [name]:[versionparam] .
+docker build -t  logsapp:exc
+
+docker run -d -p 3000:3000 --rm --name [name] [name]:[version]
+docker run -d -p 3000:3000 --rm --name logsapp logsapp:exc
+
+удалить конкретную версию
+docker rmi [name]:[version]
+docker rmi logsapp:exc
+
+
+создать репозиторий
+docker login
+docker images
+важно: тут нужно переименовать репозиторий под формат (по сути клон с новым именем)
+docker tag logsapp allgloryforrobots/logsapp
+
+docker push [dockerAccauntName]/[name]:[vertion]
+docker push allgloryforrobots/logsapp:latest
+
+забрать
+docker pull allgloryforrobots/logsapp
+
+задать env переменную 
+docker run -e PORT 3000 -e SUPER 8
+
+тест volumes
+добавляем volumes в dockerfile
+-v logs:/app/data нужно дать имя перед путем до двоеточия
+
+docker run -d -p 3000:3000 -v logs:/app/data --rm --name logsapp logsapp:volumes
+
+посмотреть настройки тома
+docker volume inspect logs
+
+удалить том
+docker volume rm logs
+
+удалить все неиспользуемые тома
+docker volume prune
+
+создать новый том
+docker volume create [name]
+
+dev разработка
+добавляем том -v [абсолютный путь]:/app
+docker run -d -p 3000:3000 -v "C:\Users\Usefr\Desktop\docker-app:/app" -v /app/node_modules -v logs:/app/data --rm --name logsapp logsapp:volumes
+
+
